@@ -1,0 +1,19 @@
+{
+  "name": "Tripwise Travel Expense Manager",
+  "short_name": "Tripwise",
+  "description": "Plan every trip and keep every expense in one place.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f6f4ef",
+  "theme_color": "#202c3a",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

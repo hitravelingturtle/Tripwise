@@ -1,0 +1,15 @@
+# Firebase / local tooling
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Node tooling
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Never commit Firebase Admin credentials
+service-account*.json
+*-firebase-adminsdk-*.json

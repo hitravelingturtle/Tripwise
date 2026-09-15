@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#202c3a">
+  <title>Tripwise — Firebase-first setup</title>
+  <style>
+:root { --bg:#f6f4ef; --paper:#fff; --ink:#1e2b38; --muted:#6f7b86; --line:#e6e1d9; --navy:#202c3a; --coral:#ee735f; --coral-pale:#fff0ec; --mint:#e6f4ed; --shadow:0 18px 50px rgba(31,43,56,.08); }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.7; -webkit-font-smoothing:antialiased; }
+.page { min-height:100vh; }
+.site-header { background:var(--navy); color:white; padding:18px clamp(18px,5vw,72px); display:flex; align-items:center; justify-content:space-between; gap:20px; position:sticky; top:0; z-index:5; }
+.brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:18px; letter-spacing:-.04em; }
+.brand-mark { width:31px; height:31px; display:grid; place-items:center; border-radius:10px; background:var(--coral); }
+.brand-mark svg { width:20px; height:20px; }
+.header-links { display:flex; align-items:center; gap:8px; }
+.header-links a { color:#c6d0da; text-decoration:none; font-size:12px; font-weight:700; padding:8px 11px; border-radius:9px; }
+.header-links a:hover { background:rgba(255,255,255,.1); color:#fff; }
+.container { width:min(980px, calc(100% - 30px)); margin:0 auto; padding:55px 0 70px; }
+.hero { background:var(--paper); border:1px solid var(--line); border-radius:25px; padding:clamp(24px,5vw,48px); box-shadow:var(--shadow); margin-bottom:22px; }
+.eyebrow { color:var(--coral); font-size:11px; text-transform:uppercase; letter-spacing:.16em; font-weight:800; }
+h1 { margin:10px 0 8px; font-size:clamp(28px,5vw,45px); letter-spacing:-.06em; line-height:1.08; }
+.hero p { margin:0; color:var(--muted); font-size:15px; max-width:680px; }
+.prose { background:var(--paper); border:1px solid var(--line); border-radius:21px; padding:clamp(22px,5vw,46px); box-shadow:0 8px 25px rgba(31,43,56,.04); }
+.prose h2 { margin:36px 0 12px; font-size:24px; letter-spacing:-.045em; line-height:1.2; border-top:1px solid var(--line); padding-top:25px; }
+.prose h3 { margin:28px 0 9px; font-size:17px; letter-spacing:-.025em; }
+.prose p { margin:12px 0; }
+.prose a { color:#c95445; font-weight:700; }
+.prose ul, .prose ol { padding-left:24px; }
+.prose li { margin:5px 0; }
+.prose strong { color:var(--ink); }
+.prose code { padding:2px 5px; border-radius:5px; background:#f3f0eb; color:#a3493c; font-size:.9em; }
+.prose pre { margin:18px 0; padding:17px 18px; overflow:auto; border-radius:12px; background:#192431; color:#eaf1f6; font-size:12px; line-height:1.65; box-shadow:inset 0 0 0 1px rgba(255,255,255,.05); }
+.prose pre code { padding:0; background:none; color:inherit; font-size:inherit; }
+.prose blockquote { margin:18px 0; padding:12px 16px; border-left:4px solid var(--coral); background:var(--coral-pale); color:#75483f; border-radius:0 9px 9px 0; }
+.prose table { width:100%; border-collapse:collapse; margin:18px 0; font-size:13px; overflow:hidden; }
+.prose th, .prose td { border:1px solid var(--line); text-align:left; padding:9px 11px; }
+.prose th { background:#faf8f4; font-weight:800; }
+.prose hr { border:0; border-top:1px solid var(--line); margin:30px 0; }
+.footer { text-align:center; color:#929ba2; font-size:11px; margin-top:22px; }
+@media (max-width:600px) {
+  .site-header { padding:13px 15px; }
+  .brand { font-size:16px; }
+  .header-links a { font-size:10px; padding:7px 8px; }
+  .container { width:min(100% - 20px, 980px); padding:28px 0 40px; }
+  .hero, .prose { border-radius:17px; padding:21px 17px; }
+  .prose h2 { font-size:21px; }
+  .prose pre { margin-left:-4px; margin-right:-4px; border-radius:9px; font-size:11px; }
+}
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="Back to Tripwise dashboard"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.7"></circle><path d="m14.9 9.1-2 4.1-3.8 1.7 2-4.1 3.8-1.7Z"></path><path d="M12 2.5v1.2M12 20.3v1.2M21.5 12h-1.2M3.7 12H2.5"></path></svg></span>Tripwise</a>
+      <nav class="header-links" aria-label="Documentation navigation"><a href="index.html">Dashboard</a><a href="README.html">Package overview</a><a href="FIREBASE_GITHUB_SETUP.html">Firebase guide</a></nav>
+    </header>
+    <main class="container">
+      <section class="hero"><div class="eyebrow">Firebase-first setup</div><h1>Publish Tripwise without Git commands.</h1><p>Upload through GitHub's website, connect Firebase Authentication and Firestore, then deploy automatically to Firebase Hosting.</p></section>
+      <article class="prose"><h1>Tripwise Firebase-first setup</h1>
+<p>This guide uses <strong>GitHub's website</strong> and <strong>Firebase's website</strong>. You do not need Git commands, GitHub Desktop or a local terminal for the deployment workflow.</p>
+<p>The app in this package is designed to use:</p>
+<ul>
+<li>Firebase Authentication for accounts.</li>
+<li>Cloud Firestore for trips and expenses.</li>
+<li>Firebase Hosting for the live website.</li>
+<li>GitHub Actions, configured from the GitHub website, to publish updates automatically.</li>
+</ul>
+<p>The app does not use <code>localStorage</code> for trip data. The service worker only caches the application files so the page can load; it does not cache trips, expenses or passwords.</p>
+<h2>Before you start</h2>
+<p>You need:</p>
+<ol>
+<li>A GitHub account.</li>
+<li>A Google account for Firebase.</li>
+<li>The extracted Tripwise ZIP folder.</li>
+<li>A browser. No Git installation is required for the steps below.</li>
+</ol>
+<h2>Part 1 — Create the GitHub repository in the browser</h2>
+<h3>1. Open GitHub</h3>
+<p>Open <a href="https://github.com">github.com</a> and sign in.</p>
+<h3>2. Create an empty repository</h3>
+<ol>
+<li>Click the <strong>plus</strong> button in the top-right corner.</li>
+<li>Click <strong>New repository</strong>.</li>
+<li>Enter <code>tripwise</code> as the repository name.</li>
+<li>Choose <strong>Private</strong> while developing, or <strong>Public</strong> if you want the source code visible.</li>
+<li>Leave <strong>Add a README file</strong> unchecked.</li>
+<li>Leave <strong>Add .gitignore</strong> unchecked.</li>
+<li>Leave <strong>Choose a license</strong> unchanged.</li>
+<li>Click <strong>Create repository</strong>.</li>
+</ol>
+<p>The repository name is not your website domain. It is only the name of the code storage area on GitHub.</p>
+<h3>3. Upload the app files</h3>
+<ol>
+<li>On the empty repository page, click <strong>uploading an existing file</strong>.</li>
+<li>Open the extracted <code>tripwise</code> folder on your computer.</li>
+<li>Select and upload these files:</li>
+</ol>
+<pre><code class="language-text">index.html
+firebase-config.js
+firebase.json
+firestore.rules
+manifest.webmanifest
+sw.js
+icon.svg
+README.html
+FIREBASE_GITHUB_SETUP.html
+</code></pre>
+<ol start="4">
+<li>Enter the commit message <code>Add Firebase Tripwise app</code>.</li>
+<li>Select <strong>Commit directly to the main branch</strong>.</li>
+<li>Click <strong>Commit changes</strong>.</li>
+</ol>
+<p>Do not upload a Firebase Admin service-account JSON file. It is never needed in the repository.</p>
+<h2>Part 2 — Create the Firebase project</h2>
+<h3>1. Create the project</h3>
+<ol>
+<li>Open <a href="https://console.firebase.google.com/">Firebase Console</a>.</li>
+<li>Click <strong>Add project</strong>.</li>
+<li>Use a name such as <code>tripwise-production</code>.</li>
+<li>Analytics is optional; you can turn it off.</li>
+<li>Click <strong>Create project</strong>.</li>
+<li>Click <strong>Continue</strong> when the project is ready.</li>
+</ol>
+<p>The Firebase project ID becomes part of the free hosting address, such as <code>tripwise-production.web.app</code>. Firebase project IDs must be globally unique.</p>
+<h3>2. Register a Web app</h3>
+<ol>
+<li>In Firebase Console, open <strong>Project settings</strong> using the gear icon.</li>
+<li>Scroll to <strong>Your apps</strong>.</li>
+<li>Click the Web icon <code>&lt;/&gt;</code>.</li>
+<li>Give the app a nickname such as <code>Tripwise web</code>.</li>
+<li>Do not enable Firebase Hosting from this registration screen yet.</li>
+<li>Click <strong>Register app</strong>.</li>
+<li>Firebase will display a <code>firebaseConfig</code> object.</li>
+</ol>
+<p>You will see values similar to:</p>
+<pre><code class="language-js">const firebaseConfig = {
+  apiKey: &quot;...&quot;,
+  authDomain: &quot;tripwise-production.firebaseapp.com&quot;,
+  projectId: &quot;tripwise-production&quot;,
+  storageBucket: &quot;tripwise-production.firebasestorage.app&quot;,
+  messagingSenderId: &quot;...&quot;,
+  appId: &quot;...&quot;
+};
+</code></pre>
+<h3>3. Add the Web config through GitHub's website</h3>
+<ol>
+<li>Open your GitHub <code>tripwise</code> repository.</li>
+<li>Click <code>firebase-config.js</code>.</li>
+<li>Click the pencil <strong>Edit this file</strong> button.</li>
+<li>Replace the placeholder values with the values from Firebase Console.</li>
+<li>Keep the structure like this:</li>
+</ol>
+<pre><code class="language-js">window.TRIPWISE_FIREBASE_CONFIG = {
+  apiKey: &quot;PASTE_YOUR_API_KEY&quot;,
+  authDomain: &quot;YOUR_PROJECT_ID.firebaseapp.com&quot;,
+  projectId: &quot;YOUR_PROJECT_ID&quot;,
+  storageBucket: &quot;YOUR_PROJECT_ID.firebasestorage.app&quot;,
+  messagingSenderId: &quot;PASTE_YOUR_SENDER_ID&quot;,
+  appId: &quot;PASTE_YOUR_APP_ID&quot;
+};
+</code></pre>
+<ol start="6">
+<li>Scroll down and click <strong>Commit changes</strong>.</li>
+</ol>
+<p>The Firebase Web config is intended to be included in a browser app. It is not an Admin SDK secret. Security comes from Authentication and Firestore Rules. Never put an Admin SDK private key in this file.</p>
+<h2>Part 3 — Enable user accounts</h2>
+<h3>1. Enable email and password login</h3>
+<ol>
+<li>In Firebase Console open <strong>Build → Authentication</strong>.</li>
+<li>Click <strong>Get started</strong>.</li>
+<li>Open the <strong>Sign-in method</strong> tab.</li>
+<li>Select <strong>Email/Password</strong>.</li>
+<li>Turn on the first Email/Password switch.</li>
+<li>Click <strong>Save</strong>.</li>
+</ol>
+<p>The app now shows a sign-in screen. Users can click <strong>Create a new account</strong> from the app.</p>
+<h3>2. Add users yourself, if required</h3>
+<p>You can also create accounts manually:</p>
+<ol>
+<li>Open <strong>Authentication → Users</strong>.</li>
+<li>Click <strong>Add user</strong>.</li>
+<li>Enter the user's email address.</li>
+<li>Set a temporary password.</li>
+<li>Click <strong>Add user</strong>.</li>
+</ol>
+<p>Firebase automatically generates a secure UID for every user. The app uses the UID to store that user's workspace at:</p>
+<pre><code class="language-text">users/{uid}/workspaces/main
+</code></pre>
+<p>Do not store user passwords in GitHub, Firestore, the app code or browser storage.</p>
+<h2>Part 4 — Create the Firestore database</h2>
+<ol>
+<li>In Firebase Console open <strong>Build → Firestore Database</strong>.</li>
+<li>Click <strong>Create database</strong>.</li>
+<li>Choose <strong>Production mode</strong>.</li>
+<li>Select a region close to your users. For India, choose the closest available Asia region.</li>
+<li>Click <strong>Create</strong>.</li>
+</ol>
+<h3>Publish the correct Firestore Rules in the browser</h3>
+<ol>
+<li>Open Firestore <strong>Rules</strong>.</li>
+<li>Replace the rules with the following:</li>
+</ol>
+<pre><code class="language-text">rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/workspaces/{workspaceId} {
+      allow read, write: if request.auth != null
+        &amp;&amp; request.auth.uid == userId;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+</code></pre>
+<ol start="3">
+<li>Click <strong>Publish</strong>.</li>
+</ol>
+<p>These rules mean a signed-in user can read and write only their own workspace. No anonymous visitor can read or modify trips.</p>
+<h2>Part 5 — Turn on Firebase Hosting</h2>
+<ol>
+<li>In Firebase Console open <strong>Build → Hosting</strong>.</li>
+<li>Click <strong>Get started</strong>.</li>
+<li>Continue through the introduction.</li>
+<li>Leave the Hosting site with its default name.</li>
+<li>Do not delete or change the Firestore rules.</li>
+</ol>
+<p>Firebase will provide a free address based on the project ID:</p>
+<pre><code class="language-text">https://YOUR_PROJECT_ID.web.app
+</code></pre>
+<p>The website is not live until GitHub Actions performs the first deployment.</p>
+<h2>Part 6 — Deploy from GitHub without Git commands</h2>
+<p>This uses GitHub Actions from the GitHub website.</p>
+<h3>1. Create a Firebase deployment key</h3>
+<ol>
+<li>In Firebase Console open <strong>Project settings</strong>.</li>
+<li>Open the <strong>Service accounts</strong> tab.</li>
+<li>Click <strong>Generate new private key</strong>.</li>
+<li>Confirm and download the JSON file.</li>
+<li>Keep the JSON file private. Do not upload it as a normal repository file.</li>
+</ol>
+<h3>2. Add the key as a GitHub Secret</h3>
+<ol>
+<li>Open your GitHub <code>tripwise</code> repository.</li>
+<li>Click <strong>Settings</strong>.</li>
+<li>In the left menu open <strong>Secrets and variables → Actions</strong>.</li>
+<li>Click <strong>New repository secret</strong>.</li>
+<li>Set the name to:</li>
+</ol>
+<pre><code class="language-text">FIREBASE_SERVICE_ACCOUNT
+</code></pre>
+<ol start="6">
+<li>Open the downloaded JSON file in a text editor.</li>
+<li>Copy the entire JSON contents.</li>
+<li>Paste it into the Secret value field.</li>
+<li>Click <strong>Add secret</strong>.</li>
+<li>Delete the downloaded JSON file from your computer after confirming the secret was saved, or store it only in a password manager.</li>
+</ol>
+<h3>3. Create the GitHub Actions workflow in the browser</h3>
+<ol>
+<li>Return to the repository's main page.</li>
+<li>Click <strong>Add file → Create new file</strong>.</li>
+<li>For the filename, enter exactly:</li>
+</ol>
+<pre><code class="language-text">.github/workflows/firebase-hosting.yml
+</code></pre>
+<ol start="4">
+<li>Paste this workflow, replacing <code>YOUR_PROJECT_ID</code> with your Firebase project ID:</li>
+</ol>
+<pre><code class="language-yaml">name: Deploy Tripwise to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: YOUR_PROJECT_ID
+          channelId: live
+</code></pre>
+<ol start="5">
+<li>Click <strong>Commit changes</strong>.</li>
+</ol>
+<p>GitHub will start the workflow automatically. Open the repository's <strong>Actions</strong> tab to watch it.</p>
+<p>When the workflow finishes with a green check mark, open:</p>
+<pre><code class="language-text">https://YOUR_PROJECT_ID.web.app
+</code></pre>
+<h2>Part 7 — First login and first cloud save</h2>
+<ol>
+<li>Open the Firebase Hosting URL.</li>
+<li>Click <strong>Create a new account</strong>.</li>
+<li>Enter your name, email and password.</li>
+<li>Click <strong>Create account</strong>.</li>
+<li>The app creates a new Firestore workspace for that Firebase user.</li>
+<li>Add or edit a trip.</li>
+<li>Add an expense.</li>
+<li>Refresh the page.</li>
+<li>Sign out and sign back in.</li>
+<li>Confirm the same trips and expenses appear.</li>
+</ol>
+<p>If you can see the same data after signing in again, Firestore sync is working.</p>
+<h2>Part 8 — Add a custom domain</h2>
+<p>GitHub does not create the website domain in this setup. GitHub stores the files and runs the deployment workflow. Firebase Hosting provides the website domain.</p>
+<h3>Option A: Use the free Firebase domain</h3>
+<p>Use the address Firebase gives you:</p>
+<pre><code class="language-text">https://YOUR_PROJECT_ID.web.app
+</code></pre>
+<p>This requires no domain purchase.</p>
+<h3>Option B: Connect your own domain</h3>
+<p>You need to buy a domain from a domain registrar such as Cloudflare Registrar, Namecheap, GoDaddy or another provider.</p>
+<ol>
+<li>In Firebase Console open <strong>Hosting</strong>.</li>
+<li>Click <strong>Add custom domain</strong>.</li>
+<li>Enter your domain, for example:</li>
+</ol>
+<pre><code class="language-text">travel.yourdomain.com
+</code></pre>
+<ol start="4">
+<li>Firebase will display a verification TXT record.</li>
+<li>Open your domain registrar's DNS settings.</li>
+<li>Add the TXT record exactly as Firebase shows it.</li>
+<li>Return to Firebase and click <strong>Verify</strong>.</li>
+<li>Firebase will show A records or CNAME records.</li>
+<li>Add those records in your domain registrar's DNS settings.</li>
+<li>Wait for DNS to update. This can take a few minutes or, sometimes, up to 24 hours.</li>
+<li>Firebase automatically provisions HTTPS/SSL after verification.</li>
+</ol>
+<p>For the root domain <code>yourdomain.com</code>, follow Firebase's exact DNS instructions. Do not guess the A-record values.</p>
+<h3>Add the custom domain to Authentication</h3>
+<p>After the custom domain works:</p>
+<ol>
+<li>Open Firebase Console <strong>Authentication</strong>.</li>
+<li>Open <strong>Settings</strong>.</li>
+<li>Find <strong>Authorized domains</strong>.</li>
+<li>Click <strong>Add domain</strong>.</li>
+<li>Add your custom domain, for example:</li>
+</ol>
+<pre><code class="language-text">travel.yourdomain.com
+</code></pre>
+<p>This allows sign-in and password reset to work on the custom domain.</p>
+<h2>Part 9 — Test the finished app</h2>
+<p>Test all of these before sharing the link:</p>
+<ul>
+<li>Create a new account.</li>
+<li>Sign out and sign back in.</li>
+<li>Create a trip.</li>
+<li>Edit a trip.</li>
+<li>Add an expense.</li>
+<li>Refresh the page.</li>
+<li>Open the website on a second device.</li>
+<li>Sign in with the same account.</li>
+<li>Confirm the data is present.</li>
+<li>Create a second Firebase account.</li>
+<li>Confirm the second account does not see the first account's private workspace.</li>
+<li>Try group expense splitting.</li>
+<li>Test the app on a phone.</li>
+<li>Add it to the phone home screen.</li>
+</ul>
+<h2>Admin setup</h2>
+<p>The first account is not automatically a global admin. To create the admin account:</p>
+<ol>
+<li>Sign in once with your own account so Firebase creates your user profile.</li>
+<li>Open Firebase Console → Firestore Database → Data.</li>
+<li>Create a collection called <code>admins</code>.</li>
+<li>Create a document whose document ID is your Firebase Authentication user UID.</li>
+<li>Add a Boolean field named <code>enabled</code> with the value <code>true</code>.</li>
+<li>Sign out and sign in again.</li>
+</ol>
+<p>You can find your UID in Firebase Console → Authentication → Users. Once the admin document exists, Tripwise shows the Admin banner, the Clear all data button and Manage members controls.</p>
+<h2>Admin data controls</h2>
+<ul>
+<li>The admin can delete any trip and any expense.</li>
+<li><strong>Clear all data</strong> deletes trips, expenses and legacy workspace documents from Firestore. It does not delete Firebase login accounts.</li>
+<li>Other users can delete only expenses where their Firebase UID is the <code>createdByUid</code>.</li>
+<li>Other users cannot delete another user's expense because Firestore Rules enforce this even if someone changes the browser code.</li>
+</ul>
+<h2>Manage users on a trip</h2>
+<ol>
+<li>Each person must create a Firebase account and sign in once.</li>
+<li>Open a trip as the admin.</li>
+<li>Click <strong>Manage members</strong>.</li>
+<li>Check the users who should access the trip.</li>
+<li>Uncheck a user to remove access. The trip owner cannot be unchecked.</li>
+<li>Click <strong>Save members</strong>.</li>
+</ol>
+<p>Members can then see the trip, add their own expenses and use equal splitting. Only the admin can add or remove members.</p>
+<h2>Offline use and automatic sync</h2>
+<p>Tripwise uses Firebase Firestore's IndexedDB offline persistence. It does not use <code>localStorage</code> for trip data.</p>
+<ul>
+<li>Open the app online at least once and sign in.</li>
+<li>If the network stops, Firestore keeps new trips and expenses in its offline queue.</li>
+<li>The top status changes to <strong>Offline · saved for sync</strong>.</li>
+<li>When the device reconnects, Firestore automatically uploads the queued writes.</li>
+<li>The status changes back to <strong>Online · synced</strong> after the server acknowledges the data.</li>
+</ul>
+<p>Do not clear the browser's site data while offline if you still have unsynced changes.</p>
+<h2>Important data model note</h2>
+<p>Trips are stored in Firestore as <code>trips/{tripId}</code> documents and expenses are stored in <code>trips/{tripId}/expenses/{expenseId}</code>. Each expense includes the Firebase UID of the person who entered it.</p>
+<h2>If something fails</h2>
+<h3>The login screen says Firebase setup is required</h3>
+<p>Open <code>firebase-config.js</code> in GitHub and replace every placeholder value with the Web app config from Firebase Console. Commit the change, wait for GitHub Actions to deploy, then hard-refresh the website.</p>
+<h3>GitHub Actions fails with a Firebase service-account error</h3>
+<p>Check that:</p>
+<ul>
+<li>The secret is named exactly <code>FIREBASE_SERVICE_ACCOUNT</code>.</li>
+<li>The secret contains the entire JSON file.</li>
+<li>The project ID in the workflow exactly matches Firebase.</li>
+<li>The service account JSON was not pasted into a normal repository file.</li>
+</ul>
+<h3>Firestore permission denied</h3>
+<p>Check that:</p>
+<ul>
+<li>Email/Password Authentication is enabled.</li>
+<li>The user is signed in.</li>
+<li>The Firestore Rules were published.</li>
+<li>The rules contain <code>request.auth.uid == userId</code>.</li>
+</ul>
+<h3>The website shows an old version</h3>
+<p>Open the GitHub Actions tab and check that the latest workflow succeeded. Then hard-refresh the browser. On a phone, close the installed app completely and open it again.</p>
+</article>
+      <div class="footer">Tripwise · Firebase cloud travel expense manager</div>
+    </main>
+  </div>
+</body>
+</html>
