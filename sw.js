@@ -1,5 +1,5 @@
-const CACHE_NAME = 'tripwise-shell-v0-9-4';
-const APP_SHELL = ['./', './index.html', './firebase-config.js', './README.html', './FIREBASE_GITHUB_SETUP.html', './manifest.webmanifest', './icon.svg'];
+const CACHE_NAME = 'tripwise-shell-v0-9-5';
+const APP_SHELL = ['./', './index.html', './firebase-config.js', './firebase-app.js', './firebase-auth.js', './firebase-firestore.js', './README.html', './FIREBASE_GITHUB_SETUP.html', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));
