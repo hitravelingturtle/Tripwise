@@ -69,6 +69,14 @@ h1 { margin:10px 0 8px; font-size:clamp(28px,5vw,45px); letter-spacing:-.06em; l
 <li>GitHub Actions, configured from the GitHub website, to publish updates automatically.</li>
 </ul>
 <p>The app does not use <code>localStorage</code> for trip data. The service worker only caches the application files so the page can load; it does not cache trips, expenses or passwords.</p>
+<h2>Updating an existing Tripwise deployment</h2>
+<p>If you already have the GitHub repository and Firebase project, do not repeat the full setup. For this release, replace only these files in GitHub:</p>
+<ul>
+<li><code>index.html</code> — dashboard, visible delete controls, Settings access screen and version v0.9.3.</li>
+<li><code>firestore.rules</code> — server-side permissions for admins and user-owned expenses.</li>
+<li><code>sw.js</code> — new cache version so the browser does not keep the old dashboard.</li>
+</ul>
+<p>Keep your existing <code>firebase-config.js</code>. After committing, open GitHub Actions and wait for the Firebase Hosting deployment to finish. Then hard-refresh the browser. If the old page still appears, clear the old site service worker once from browser Developer Tools → Application → Service Workers → Unregister, then reload.</p>
 <h2>Before you start</h2>
 <p>You need:</p>
 <ol>
@@ -380,16 +388,25 @@ jobs:
 <li>Create a collection called <code>admins</code>.</li>
 <li>Create a document whose document ID is your Firebase Authentication user UID.</li>
 <li>Add a Boolean field named <code>enabled</code> with the value <code>true</code>.</li>
+<li>Add a Boolean field named <code>canDeleteTrips</code> with the value <code>true</code>.</li>
+<li>Add a Boolean field named <code>canClearAllData</code> with the value <code>true</code> for the project owner only.</li>
+<li>Add a Boolean field named <code>canManageMembers</code> with the value <code>true</code>.</li>
+<li>Add a Boolean field named <code>canManageAccess</code> with the value <code>true</code> for the project owner only.</li>
 <li>Sign out and sign in again.</li>
 </ol>
-<p>You can find your UID in Firebase Console → Authentication → Users. Once the admin document exists, Tripwise shows the Admin banner, the Clear all data button and Manage members controls.</p>
+<p>You can find your UID in Firebase Console → Authentication → Users. Once the admin document exists, Tripwise shows the Admin banner, the Settings access controls, the Delete trip button and, if enabled, the Clear all data button.</p>
 <h2>Admin data controls</h2>
 <ul>
-<li>The admin can delete any trip and any expense.</li>
-<li><strong>Clear all data</strong> deletes trips, expenses and legacy workspace documents from Firestore. It does not delete Firebase login accounts.</li>
+<li>The <strong>Settings</strong> button shows app version and access controls.</li>
+<li>An admin with <code>canDeleteTrips</code> can delete any trip and any expense.</li>
+<li>An admin with <code>canClearAllData</code> can delete every trip, expense and legacy workspace document from Firestore. It does not delete Firebase login accounts.</li>
+<li>An admin with <code>canManageMembers</code> can add or remove users from a trip.</li>
+<li>An admin with <code>canManageAccess</code> can grant these permissions to other registered users.</li>
 <li>Other users can delete only expenses where their Firebase UID is the <code>createdByUid</code>.</li>
-<li>Other users cannot delete another user's expense because Firestore Rules enforce this even if someone changes the browser code.</li>
+<li>Firestore Rules enforce these permissions on the server.</li>
 </ul>
+<h2>App version</h2>
+<p>The current version is <strong>v0.9.3</strong>. It is visible at the bottom of the dashboard and in Settings. When a new package is released, the version number will change so you can confirm that GitHub and Firebase are serving the new files.</p>
 <h2>Manage users on a trip</h2>
 <ol>
 <li>Each person must create a Firebase account and sign in once.</li>
