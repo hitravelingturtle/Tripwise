@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tripwise-shell-v0-9-3';
+const CACHE_NAME = 'tripwise-shell-v0-9-4';
 const APP_SHELL = ['./', './index.html', './firebase-config.js', './README.html', './FIREBASE_GITHUB_SETUP.html', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', event => {
